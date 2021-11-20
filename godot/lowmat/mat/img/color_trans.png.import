@@ -2,8 +2,8 @@
 
 importer="texture"
 type="StreamTexture"
-path.s3tc="res://.import/rough_metall.png-275ff62e6569bfd2987ab76677923223.s3tc.stex"
-path.etc2="res://.import/rough_metall.png-275ff62e6569bfd2987ab76677923223.etc2.stex"
+path.s3tc="res://.import/color_trans.png-c95e43e92b720b863ffcee1297c5f9c3.s3tc.stex"
+path.etc2="res://.import/color_trans.png-c95e43e92b720b863ffcee1297c5f9c3.etc2.stex"
 metadata={
 "imported_formats": [ "s3tc", "etc2" ],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://lowmat/img/rough_metall.png"
-dest_files=[ "res://.import/rough_metall.png-275ff62e6569bfd2987ab76677923223.s3tc.stex", "res://.import/rough_metall.png-275ff62e6569bfd2987ab76677923223.etc2.stex" ]
+source_file="res://lowmat/mat/img/color_trans.png"
+dest_files=[ "res://.import/color_trans.png-c95e43e92b720b863ffcee1297c5f9c3.s3tc.stex", "res://.import/color_trans.png-c95e43e92b720b863ffcee1297c5f9c3.etc2.stex" ]
 
 [params]
 
@@ -25,11 +25,12 @@ flags/repeat=true
 flags/filter=true
 flags/mipmaps=true
 flags/anisotropic=false
-flags/srgb=2
+flags/srgb=1
 process/fix_alpha_border=true
 process/premult_alpha=false
 process/HDR_as_SRGB=false
 process/invert_color=false
+process/normal_map_invert_y=false
 stream=false
 size_limit=0
 detect_3d=false

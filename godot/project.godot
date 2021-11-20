@@ -13,6 +13,15 @@ config_version=4
 config/name="Low Material"
 config/icon="res://icon.png"
 
+[editor_plugins]
+
+enabled=PoolStringArray( "res://addons/lowmat/plugin.cfg" )
+
+[global]
+
+phy=false
+ph=false
+
 [physics]
 
 common/enable_pause_aware_picking=true

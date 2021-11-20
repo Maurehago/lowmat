@@ -2,8 +2,8 @@
 
 importer="texture"
 type="StreamTexture"
-path.s3tc="res://.import/lowmat_em.png-d2bce3fabe34fd2997aac97b1ac12814.s3tc.stex"
-path.etc2="res://.import/lowmat_em.png-d2bce3fabe34fd2997aac97b1ac12814.etc2.stex"
+path.s3tc="res://.import/colors.png-5389a9265f63aed10d70e5603129aaa6.s3tc.stex"
+path.etc2="res://.import/colors.png-5389a9265f63aed10d70e5603129aaa6.etc2.stex"
 metadata={
 "imported_formats": [ "s3tc", "etc2" ],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://lowmat/img/lowmat_em.png"
-dest_files=[ "res://.import/lowmat_em.png-d2bce3fabe34fd2997aac97b1ac12814.s3tc.stex", "res://.import/lowmat_em.png-d2bce3fabe34fd2997aac97b1ac12814.etc2.stex" ]
+source_file="res://lowmat/mat/img/colors.png"
+dest_files=[ "res://.import/colors.png-5389a9265f63aed10d70e5603129aaa6.s3tc.stex", "res://.import/colors.png-5389a9265f63aed10d70e5603129aaa6.etc2.stex" ]
 
 [params]
 
@@ -30,6 +30,7 @@ process/fix_alpha_border=true
 process/premult_alpha=false
 process/HDR_as_SRGB=false
 process/invert_color=false
+process/normal_map_invert_y=false
 stream=false
 size_limit=0
 detect_3d=false
