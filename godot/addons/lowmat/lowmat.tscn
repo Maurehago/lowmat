@@ -1,0 +1,259 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://addons/lowmat/colormap.tres" type="Texture" id=1]
+[ext_resource path="res://addons/lowmat/lowmat.gd" type="Script" id=2]
+[ext_resource path="res://addons/lowmat/colortexture.gd" type="Script" id=3]
+[ext_resource path="res://addons/lowmat/colorselect.gd" type="Script" id=4]
+
+[node name="Low-Material" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="UI" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_constants/separation = 25
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Join" type="VBoxContainer" parent="UI"]
+margin_right = 1024.0
+margin_bottom = 62.0
+
+[node name="Label" type="Label" parent="UI/Join"]
+margin_right = 1024.0
+margin_bottom = 14.0
+text = "Join"
+align = 1
+
+[node name="JoinMeshButton" type="Button" parent="UI/Join"]
+margin_top = 18.0
+margin_right = 1024.0
+margin_bottom = 38.0
+text = "MeshInstance"
+
+[node name="JoinMultimeshButton" type="Button" parent="UI/Join"]
+margin_top = 42.0
+margin_right = 1024.0
+margin_bottom = 62.0
+text = "MultimeshInstance"
+
+[node name="Size" type="VBoxContainer" parent="UI"]
+margin_top = 87.0
+margin_right = 1024.0
+margin_bottom = 249.0
+
+[node name="Label" type="Label" parent="UI/Size"]
+margin_right = 1024.0
+margin_bottom = 14.0
+text = "Size"
+align = 1
+
+[node name="Mesh" type="HBoxContainer" parent="UI/Size"]
+margin_top = 18.0
+margin_right = 1024.0
+margin_bottom = 42.0
+alignment = 1
+
+[node name="MeshX" type="LineEdit" parent="UI/Size/Mesh"]
+margin_left = 421.0
+margin_right = 479.0
+margin_bottom = 24.0
+text = "null"
+editable = false
+context_menu_enabled = false
+virtual_keyboard_enabled = false
+shortcut_keys_enabled = false
+
+[node name="MeshY" type="LineEdit" parent="UI/Size/Mesh"]
+margin_left = 483.0
+margin_right = 541.0
+margin_bottom = 24.0
+text = "null"
+editable = false
+context_menu_enabled = false
+virtual_keyboard_enabled = false
+shortcut_keys_enabled = false
+
+[node name="MeshZ" type="LineEdit" parent="UI/Size/Mesh"]
+margin_left = 545.0
+margin_right = 603.0
+margin_bottom = 24.0
+text = "null"
+editable = false
+context_menu_enabled = false
+virtual_keyboard_enabled = false
+shortcut_keys_enabled = false
+
+[node name="Step" type="HBoxContainer" parent="UI/Size"]
+margin_top = 46.0
+margin_right = 1024.0
+margin_bottom = 70.0
+custom_constants/separation = 24
+
+[node name="Label" type="Label" parent="UI/Size/Step"]
+margin_top = 5.0
+margin_right = 28.0
+margin_bottom = 19.0
+text = "Step"
+
+[node name="StepLineEdit" type="LineEdit" parent="UI/Size/Step"]
+margin_left = 52.0
+margin_right = 110.0
+margin_bottom = 24.0
+text = "0.16"
+align = 1
+editable = false
+context_menu_enabled = false
+virtual_keyboard_enabled = false
+shortcut_keys_enabled = false
+selecting_enabled = false
+
+[node name="StepSlider" type="HSlider" parent="UI/Size"]
+margin_top = 74.0
+margin_right = 1024.0
+margin_bottom = 90.0
+min_value = 0.16
+max_value = 1.28
+step = 0.16
+value = 0.16
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SizeX" type="HBoxContainer" parent="UI/Size"]
+margin_top = 94.0
+margin_right = 1024.0
+margin_bottom = 114.0
+custom_constants/separation = 15
+
+[node name="Label" type="Label" parent="UI/Size/SizeX"]
+margin_top = 3.0
+margin_right = 38.0
+margin_bottom = 17.0
+text = "Size X"
+
+[node name="SizeXButton" type="Button" parent="UI/Size/SizeX"]
+margin_left = 53.0
+margin_right = 89.0
+margin_bottom = 20.0
+text = "<<<"
+
+[node name="SizeXButton2" type="Button" parent="UI/Size/SizeX"]
+margin_left = 104.0
+margin_right = 140.0
+margin_bottom = 20.0
+text = ">>>"
+
+[node name="SizeY" type="HBoxContainer" parent="UI/Size"]
+margin_top = 118.0
+margin_right = 1024.0
+margin_bottom = 138.0
+custom_constants/separation = 15
+
+[node name="Label" type="Label" parent="UI/Size/SizeY"]
+margin_top = 3.0
+margin_right = 37.0
+margin_bottom = 17.0
+text = "Size Y"
+
+[node name="SizeYButton" type="Button" parent="UI/Size/SizeY"]
+margin_left = 52.0
+margin_right = 88.0
+margin_bottom = 20.0
+text = "<<<"
+
+[node name="SizeYButton2" type="Button" parent="UI/Size/SizeY"]
+margin_left = 103.0
+margin_right = 139.0
+margin_bottom = 20.0
+text = ">>>"
+
+[node name="SizeZ" type="HBoxContainer" parent="UI/Size"]
+margin_top = 142.0
+margin_right = 1024.0
+margin_bottom = 162.0
+custom_constants/separation = 15
+
+[node name="Label" type="Label" parent="UI/Size/SizeZ"]
+margin_top = 3.0
+margin_right = 38.0
+margin_bottom = 17.0
+text = "Size Z"
+
+[node name="SizeZButton" type="Button" parent="UI/Size/SizeZ"]
+margin_left = 53.0
+margin_right = 89.0
+margin_bottom = 20.0
+text = "<<<"
+
+[node name="SizeZButton2" type="Button" parent="UI/Size/SizeZ"]
+margin_left = 104.0
+margin_right = 140.0
+margin_bottom = 20.0
+text = ">>>"
+
+[node name="Color" type="VBoxContainer" parent="UI"]
+margin_top = 274.0
+margin_right = 1024.0
+margin_bottom = 526.0
+
+[node name="Label" type="Label" parent="UI/Color"]
+margin_right = 1024.0
+margin_bottom = 14.0
+text = "Color"
+align = 1
+
+[node name="ColorSelect" type="OptionButton" parent="UI/Color"]
+margin_top = 18.0
+margin_right = 1024.0
+margin_bottom = 38.0
+text = "select Color"
+script = ExtResource( 4 )
+
+[node name="ColorTexture" type="TextureRect" parent="UI/Color"]
+margin_top = 42.0
+margin_right = 1024.0
+margin_bottom = 186.0
+texture = ExtResource( 1 )
+stretch_mode = 1
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label2" type="Label" parent="UI/Color"]
+margin_top = 190.0
+margin_right = 1024.0
+margin_bottom = 204.0
+text = "Roughness"
+
+[node name="RoughnessSlider" type="HSlider" parent="UI/Color"]
+margin_top = 208.0
+margin_right = 1024.0
+margin_bottom = 224.0
+max_value = 6.0
+value = 6.0
+
+[node name="Metallic" type="CheckBox" parent="UI/Color"]
+margin_top = 228.0
+margin_right = 1024.0
+margin_bottom = 252.0
+text = "Metallic"
+
+[connection signal="pressed" from="UI/Join/JoinMeshButton" to="." method="_on_JoinMeshButton_pressed"]
+[connection signal="pressed" from="UI/Join/JoinMultimeshButton" to="." method="_on_JoinMultimeshButton_pressed"]
+[connection signal="value_changed" from="UI/Size/StepSlider" to="." method="_on_StepSlider_value_changed"]
+[connection signal="pressed" from="UI/Size/SizeX/SizeXButton" to="." method="_on_SizeXButton_pressed"]
+[connection signal="pressed" from="UI/Size/SizeX/SizeXButton2" to="." method="_on_SizeXButton2_pressed"]
+[connection signal="pressed" from="UI/Size/SizeY/SizeYButton" to="." method="_on_SizeYButton_pressed"]
+[connection signal="pressed" from="UI/Size/SizeY/SizeYButton2" to="." method="_on_SizeYButton2_pressed"]
+[connection signal="pressed" from="UI/Size/SizeZ/SizeZButton" to="." method="_on_SizeZButton_pressed"]
+[connection signal="pressed" from="UI/Size/SizeZ/SizeZButton2" to="." method="_on_SizeZButton2_pressed"]
+[connection signal="item_selected" from="UI/Color/ColorSelect" to="UI/Color/ColorSelect" method="_on_ColorSelect_item_selected"]
+[connection signal="gui_input" from="UI/Color/ColorTexture" to="UI/Color/ColorTexture" method="_on_ColorTexture_gui_input"]

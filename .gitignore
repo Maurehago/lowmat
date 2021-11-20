@@ -10,5 +10,5 @@ _import/
 data_*/
 
 # Blender
-.blend1
+*.blend1
 
