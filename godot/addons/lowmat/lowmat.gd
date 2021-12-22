@@ -21,6 +21,7 @@ var ui_color_select: OptionButton
 var ui_color: TextureRect
 var ui_roughness: Slider
 var ui_metallic: CheckBox
+var ui_explode_mesh_button: Button
 
 
 
@@ -66,6 +67,7 @@ func _ready():
 	# UI Elemente
 	ui_step_lineEdit = get_node("UI/Size/Step/StepLineEdit")
 	ui_step_lineEdit.text = str(change_step)
+	ui_explode_mesh_button = get_node("UI/Explode/ExplodeMeshButton")
 	
 	ui_size = get_node("UI/Size")
 	ui_meshsize_x = get_node("UI/Size/Mesh/MeshX")
@@ -93,12 +95,17 @@ func _ready():
 # Selektierte Nodes lesen
 func get_selected() -> void:
 	selected_nodes = editor_selection.get_selected_nodes()
+	if ui_explode_mesh_button:
+		ui_explode_mesh_button.disabled = true
+	
 	if selected_nodes and selected_nodes.size() > 0 and selected_nodes[0] is Spatial:
 		check_node = selected_nodes[0]
 		if check_node is MeshInstance:
 			check_mesh = check_node.mesh
 		elif check_node is MultiMeshInstance and check_node.multimesh:
 			check_mesh = check_node.multimesh.mesh
+			if ui_explode_mesh_button:
+				ui_explode_mesh_button.disabled = false
 		else:
 			check_mesh = null
 		root_node = check_node.get_tree().edited_scene_root
@@ -250,7 +257,8 @@ func check_mesh_data(node:Spatial, to_meshinstance: bool) -> void:
 		# Transform und Mesch lesen
 		var pos: Transform = shapeInfo[0]
 		var mesh: ArrayMesh = primitive_to_arrayMesh(shapeInfo[1])
-
+		mesh.regen_normalmaps()
+		
 		# muss einen Namen haben
 		# mesh.resource_name = "CSG" + mesh.resource_name
 
@@ -323,6 +331,7 @@ func create_multimesh() -> void:
 	var new_node: Spatial = Spatial.new()
 	new_node.transform.origin = check_node.transform.origin
 	new_node.name = "LowMat"
+	var new_name = check_node.name
 	
 	# alle Kindnodes prüfen
 	check_mesh_data(check_node, false)
@@ -353,14 +362,54 @@ func create_multimesh() -> void:
 		multimesh_instance.set_owner(root_node)
 	
 	# Selection umsetzen
+	var old_node = check_node
 	editor_selection.clear()
 	editor_selection.add_node(new_node)
 
 	# Mesh Daten zurücksetzen
 	lowmat_mesh_data = {}
 	data_index = 0
+	old_node.get_parent().remove_child(old_node)
+	old_node.queue_free()
+	new_node.name = new_name
+	
 
+# Multimesh auseinandernehmen
+func explode_multimesh() -> void:
+	if !check_node:
+		return
+	if !check_node is MultiMeshInstance:
+		return
 
+	# neues Multimesh SammelNode erstellen
+	var new_node: Spatial = Spatial.new()
+	new_node.transform.origin = check_node.transform.origin
+	new_node.name = "multi"
+	add_at_parent(new_node)
+
+	var multimesh: MultiMesh = check_node.multimesh
+	var mesh: ArrayMesh = multimesh.mesh
+
+	# bestehende Node als Alte Node makieren
+	var old_node = check_node
+	var new_name = check_node.name
+	
+	for i in range(multimesh.instance_count):
+		var transform: Transform = multimesh.get_instance_transform(i)
+		var new_meshInstance: MeshInstance = MeshInstance.new()
+		new_meshInstance.transform = transform
+		new_meshInstance.mesh = mesh
+		new_node.add_child(new_meshInstance)
+		new_meshInstance.set_owner(root_node)
+
+	# Selection umsetzen
+	editor_selection.clear()
+	editor_selection.add_node(new_node)
+
+	# alte node löschen
+	old_node.get_parent().remove_child(old_node)
+	old_node.queue_free()
+	new_node.name = new_name
 
 # erzeugt eine einzelne neue MeshInstance
 func create_meshinstance() -> void:
@@ -424,6 +473,72 @@ func show_size(mesh: Mesh) -> void:
 	ui_meshsize_y.text = "y: " + str(aabb.size.y)
 	ui_meshsize_z.text = "z: " + str(aabb.size.z)
 
+
+# Origin Punkt verschieben
+func change_origin(mesh_instance: MeshInstance, axe: String, position: float):
+	if !mesh_instance:
+		return
+	if !mesh_instance.mesh:
+		return
+
+	var mesh_data_tool: MeshDataTool = MeshDataTool.new()
+	var mesh: Mesh = mesh_instance.mesh
+	var array_mesh: ArrayMesh = ArrayMesh.new()
+
+	# Wenn Primitives Mesh
+	if mesh is PrimitiveMesh:
+		mesh = primitive_to_arrayMesh(mesh)
+	
+	var aabb: AABB = mesh.get_aabb()
+	var new_origin: Vector3 = Vector3.ZERO
+	
+	# Je nach position ändern
+	if axe == "x":
+		new_origin.x = aabb.size.x * position
+	elif axe == "y":
+		new_origin.y = aabb.size.y * position
+	elif axe == "z":
+		new_origin.z = aabb.size.z * position
+
+	# Alle punkte durchgehen
+	for i in range(mesh.get_surface_count()):
+		var min_pos: Vector3 = Vector3.ZERO
+		mesh_data_tool.create_from_surface(mesh, i)
+		for j in range(mesh_data_tool.get_vertex_count()):
+			var vertex = mesh_data_tool.get_vertex(j)
+			if j == 0:
+				# Je nach position ändern
+				if axe == "x":
+					min_pos.x = vertex.x
+				elif axe == "y":
+					min_pos.y = vertex.y
+				elif axe == "z":
+					min_pos.z = vertex.z
+			# Je nach position ändern
+			elif axe == "x" and vertex.x < min_pos.x:
+				min_pos.x = vertex.x
+			elif axe == "y" and vertex.y < min_pos.y:
+				min_pos.y = vertex.y
+			elif axe == "z" and vertex.z < min_pos.z:
+				min_pos.z = vertex.z
+			
+		var diff:Vector3 = Vector3.ZERO
+		diff = (Vector3.ZERO - min_pos) - new_origin
+
+		print("diff: ", diff)
+		print("new_origin: ", new_origin)
+
+		for j in range(mesh_data_tool.get_vertex_count()):
+			var vertex = mesh_data_tool.get_vertex(j)
+			# neu position
+			vertex += diff
+			mesh_data_tool.set_vertex(j, vertex)
+
+		mesh_data_tool.commit_to_surface(array_mesh)
+		
+	# neu zuweisen
+	mesh_instance.mesh = array_mesh
+	_on_selection_change()
 
 # Mesch größe ändern
 func change_size(mesh_instance: MeshInstance, direction: Vector3):
@@ -846,3 +961,55 @@ func _on_change_roughness(newValue: float):
 	# rough ändern
 	set_color_uv(oldColor_pos, int(newValue), oldColor_metallic)
 	
+
+# Origin nach links
+func _on_OriginXButton_pressed():
+	get_selected()
+	change_origin(check_node, "x", 0.0)
+
+
+func _on_OriginXButton3_pressed():
+	get_selected()
+	change_origin(check_node, "x", 0.5)
+
+
+func _on_OriginXButton2_pressed():
+	get_selected()
+	change_origin(check_node, "x", 1.0)
+
+
+func _on_OriginYButton_pressed():
+	get_selected()
+	change_origin(check_node, "y", 0.0)
+
+
+func _on_OriginYButton3_pressed():
+	get_selected()
+	change_origin(check_node, "y", 0.5)
+
+
+
+func _on_OriginYButton2_pressed():
+	get_selected()
+	change_origin(check_node, "y", 1.0)
+
+
+
+func _on_OriginZButton_pressed():
+	get_selected()
+	change_origin(check_node, "z", 0.0)
+
+
+
+func _on_OriginZButton3_pressed():
+	get_selected()
+	change_origin(check_node, "z", 0.5)
+
+func _on_OriginZButton2_pressed():
+	get_selected()
+	change_origin(check_node, "z", 1.0)
+
+
+func _on_ExplodeMeshButton_pressed():
+	get_selected()
+	explode_multimesh()
