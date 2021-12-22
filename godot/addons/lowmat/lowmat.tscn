@@ -43,10 +43,28 @@ margin_right = 1024.0
 margin_bottom = 62.0
 text = "MultimeshInstance"
 
-[node name="Size" type="VBoxContainer" parent="UI"]
+[node name="Explode" type="VBoxContainer" parent="UI"]
 margin_top = 87.0
 margin_right = 1024.0
-margin_bottom = 249.0
+margin_bottom = 125.0
+
+[node name="Label" type="Label" parent="UI/Explode"]
+margin_right = 1024.0
+margin_bottom = 14.0
+text = "Explode"
+align = 1
+
+[node name="ExplodeMeshButton" type="Button" parent="UI/Explode"]
+margin_top = 18.0
+margin_right = 1024.0
+margin_bottom = 38.0
+disabled = true
+text = "Multimesh explode"
+
+[node name="Size" type="VBoxContainer" parent="UI"]
+margin_top = 150.0
+margin_right = 1024.0
+margin_bottom = 264.0
 
 [node name="Label" type="Label" parent="UI/Size"]
 margin_right = 1024.0
@@ -90,7 +108,98 @@ context_menu_enabled = false
 virtual_keyboard_enabled = false
 shortcut_keys_enabled = false
 
+[node name="OriginX" type="HBoxContainer" parent="UI/Size"]
+margin_top = 46.0
+margin_right = 1024.0
+margin_bottom = 66.0
+custom_constants/separation = 15
+
+[node name="Label" type="Label" parent="UI/Size/OriginX"]
+margin_top = 3.0
+margin_right = 51.0
+margin_bottom = 17.0
+text = "Origin X"
+
+[node name="OriginXButton" type="Button" parent="UI/Size/OriginX"]
+margin_left = 66.0
+margin_right = 102.0
+margin_bottom = 20.0
+text = "<<<"
+
+[node name="OriginXButton3" type="Button" parent="UI/Size/OriginX"]
+margin_left = 117.0
+margin_right = 149.0
+margin_bottom = 20.0
+text = "< >"
+
+[node name="OriginXButton2" type="Button" parent="UI/Size/OriginX"]
+margin_left = 164.0
+margin_right = 200.0
+margin_bottom = 20.0
+text = ">>>"
+
+[node name="OriginY" type="HBoxContainer" parent="UI/Size"]
+margin_top = 70.0
+margin_right = 1024.0
+margin_bottom = 90.0
+custom_constants/separation = 15
+
+[node name="Label" type="Label" parent="UI/Size/OriginY"]
+margin_top = 3.0
+margin_right = 50.0
+margin_bottom = 17.0
+text = "Origin Y"
+
+[node name="OriginYButton" type="Button" parent="UI/Size/OriginY"]
+margin_left = 65.0
+margin_right = 101.0
+margin_bottom = 20.0
+text = "<<<"
+
+[node name="OriginYButton3" type="Button" parent="UI/Size/OriginY"]
+margin_left = 116.0
+margin_right = 148.0
+margin_bottom = 20.0
+text = "< >"
+
+[node name="OriginYButton2" type="Button" parent="UI/Size/OriginY"]
+margin_left = 163.0
+margin_right = 199.0
+margin_bottom = 20.0
+text = ">>>"
+
+[node name="OriginZ" type="HBoxContainer" parent="UI/Size"]
+margin_top = 94.0
+margin_right = 1024.0
+margin_bottom = 114.0
+custom_constants/separation = 15
+
+[node name="Label" type="Label" parent="UI/Size/OriginZ"]
+margin_top = 3.0
+margin_right = 51.0
+margin_bottom = 17.0
+text = "Origin Z"
+
+[node name="OriginZButton" type="Button" parent="UI/Size/OriginZ"]
+margin_left = 66.0
+margin_right = 102.0
+margin_bottom = 20.0
+text = "<<<"
+
+[node name="OriginZButton3" type="Button" parent="UI/Size/OriginZ"]
+margin_left = 117.0
+margin_right = 149.0
+margin_bottom = 20.0
+text = "< >"
+
+[node name="OriginZButton2" type="Button" parent="UI/Size/OriginZ"]
+margin_left = 164.0
+margin_right = 200.0
+margin_bottom = 20.0
+text = ">>>"
+
 [node name="Step" type="HBoxContainer" parent="UI/Size"]
+visible = false
 margin_top = 46.0
 margin_right = 1024.0
 margin_bottom = 70.0
@@ -115,9 +224,10 @@ shortcut_keys_enabled = false
 selecting_enabled = false
 
 [node name="StepSlider" type="HSlider" parent="UI/Size"]
-margin_top = 74.0
+visible = false
+margin_top = 46.0
 margin_right = 1024.0
-margin_bottom = 90.0
+margin_bottom = 62.0
 min_value = 0.16
 max_value = 1.28
 step = 0.16
@@ -127,9 +237,10 @@ __meta__ = {
 }
 
 [node name="SizeX" type="HBoxContainer" parent="UI/Size"]
-margin_top = 94.0
+visible = false
+margin_top = 70.0
 margin_right = 1024.0
-margin_bottom = 114.0
+margin_bottom = 90.0
 custom_constants/separation = 15
 
 [node name="Label" type="Label" parent="UI/Size/SizeX"]
@@ -151,9 +262,10 @@ margin_bottom = 20.0
 text = ">>>"
 
 [node name="SizeY" type="HBoxContainer" parent="UI/Size"]
-margin_top = 118.0
+visible = false
+margin_top = 70.0
 margin_right = 1024.0
-margin_bottom = 138.0
+margin_bottom = 90.0
 custom_constants/separation = 15
 
 [node name="Label" type="Label" parent="UI/Size/SizeY"]
@@ -175,9 +287,10 @@ margin_bottom = 20.0
 text = ">>>"
 
 [node name="SizeZ" type="HBoxContainer" parent="UI/Size"]
-margin_top = 142.0
+visible = false
+margin_top = 70.0
 margin_right = 1024.0
-margin_bottom = 162.0
+margin_bottom = 90.0
 custom_constants/separation = 15
 
 [node name="Label" type="Label" parent="UI/Size/SizeZ"]
@@ -199,9 +312,9 @@ margin_bottom = 20.0
 text = ">>>"
 
 [node name="Color" type="VBoxContainer" parent="UI"]
-margin_top = 274.0
+margin_top = 289.0
 margin_right = 1024.0
-margin_bottom = 526.0
+margin_bottom = 541.0
 
 [node name="Label" type="Label" parent="UI/Color"]
 margin_right = 1024.0
@@ -213,7 +326,9 @@ align = 1
 margin_top = 18.0
 margin_right = 1024.0
 margin_bottom = 38.0
-text = "select Color"
+text = "select MeshInstance"
+items = [ "select MeshInstance", null, false, 0, null ]
+selected = 0
 script = ExtResource( 4 )
 
 [node name="ColorTexture" type="TextureRect" parent="UI/Color"]
@@ -238,7 +353,7 @@ margin_top = 208.0
 margin_right = 1024.0
 margin_bottom = 224.0
 max_value = 6.0
-value = 6.0
+value = 5.0
 
 [node name="Metallic" type="CheckBox" parent="UI/Color"]
 margin_top = 228.0
@@ -248,6 +363,16 @@ text = "Metallic"
 
 [connection signal="pressed" from="UI/Join/JoinMeshButton" to="." method="_on_JoinMeshButton_pressed"]
 [connection signal="pressed" from="UI/Join/JoinMultimeshButton" to="." method="_on_JoinMultimeshButton_pressed"]
+[connection signal="pressed" from="UI/Explode/ExplodeMeshButton" to="." method="_on_ExplodeMeshButton_pressed"]
+[connection signal="pressed" from="UI/Size/OriginX/OriginXButton" to="." method="_on_OriginXButton_pressed"]
+[connection signal="pressed" from="UI/Size/OriginX/OriginXButton3" to="." method="_on_OriginXButton3_pressed"]
+[connection signal="pressed" from="UI/Size/OriginX/OriginXButton2" to="." method="_on_OriginXButton2_pressed"]
+[connection signal="pressed" from="UI/Size/OriginY/OriginYButton" to="." method="_on_OriginYButton_pressed"]
+[connection signal="pressed" from="UI/Size/OriginY/OriginYButton3" to="." method="_on_OriginYButton3_pressed"]
+[connection signal="pressed" from="UI/Size/OriginY/OriginYButton2" to="." method="_on_OriginYButton2_pressed"]
+[connection signal="pressed" from="UI/Size/OriginZ/OriginZButton" to="." method="_on_OriginZButton_pressed"]
+[connection signal="pressed" from="UI/Size/OriginZ/OriginZButton3" to="." method="_on_OriginZButton3_pressed"]
+[connection signal="pressed" from="UI/Size/OriginZ/OriginZButton2" to="." method="_on_OriginZButton2_pressed"]
 [connection signal="value_changed" from="UI/Size/StepSlider" to="." method="_on_StepSlider_value_changed"]
 [connection signal="pressed" from="UI/Size/SizeX/SizeXButton" to="." method="_on_SizeXButton_pressed"]
 [connection signal="pressed" from="UI/Size/SizeX/SizeXButton2" to="." method="_on_SizeXButton2_pressed"]
