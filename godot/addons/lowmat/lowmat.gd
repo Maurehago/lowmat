@@ -60,6 +60,9 @@ var oldColor_pos: Vector2
 var oldColor_roughness: int = 6
 var oldColor_metallic: bool = false
 
+var no_event: bool = false # Wenn Selection ändert, dürfen andere Events nicht ausgeführt werden
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	editor_selection.connect("selection_changed", self, "_on_selection_change")
@@ -107,11 +110,14 @@ func get_selected() -> void:
 			if ui_explode_mesh_button:
 				ui_explode_mesh_button.disabled = false
 		else:
+			# check_node = null
 			check_mesh = null
+			pass
 		root_node = check_node.get_tree().edited_scene_root
 	else:
 		check_node = null
 		check_mesh = null
+		pass
 
 
 	# test:
@@ -383,8 +389,8 @@ func explode_multimesh() -> void:
 
 	# neues Multimesh SammelNode erstellen
 	var new_node: Spatial = Spatial.new()
-	new_node.transform.origin = check_node.transform.origin
-	new_node.name = "multi"
+	new_node.transform = check_node.transform
+	#new_node.name = "multi"
 	add_at_parent(new_node)
 
 	var multimesh: MultiMesh = check_node.multimesh
@@ -392,6 +398,9 @@ func explode_multimesh() -> void:
 
 	# bestehende Node als Alte Node makieren
 	var old_node = check_node
+	var old_transform = check_node.transform
+	var old_basis: Basis = old_transform.basis
+	var old_origin: Vector3 = old_transform.origin
 	var new_name = check_node.name
 	
 	for i in range(multimesh.instance_count):
@@ -399,17 +408,26 @@ func explode_multimesh() -> void:
 		var new_meshInstance: MeshInstance = MeshInstance.new()
 		new_meshInstance.transform = transform
 		new_meshInstance.mesh = mesh
+		new_meshInstance.name = new_name
+
 		new_node.add_child(new_meshInstance)
+		var g_transform = new_meshInstance.global_transform
+		new_meshInstance.get_parent().remove_child(new_meshInstance)
+		add_at_parent(new_meshInstance)
+		new_meshInstance.global_transform = g_transform
+
 		new_meshInstance.set_owner(root_node)
 
+
 	# Selection umsetzen
+	new_node.get_parent().remove_child(new_node)
 	editor_selection.clear()
-	editor_selection.add_node(new_node)
+	#editor_selection.add_node(new_node)
 
 	# alte node löschen
 	old_node.get_parent().remove_child(old_node)
 	old_node.queue_free()
-	new_node.name = new_name
+	#new_node.name = new_name
 
 # erzeugt eine einzelne neue MeshInstance
 func create_meshinstance() -> void:
@@ -525,8 +543,8 @@ func change_origin(mesh_instance: MeshInstance, axe: String, position: float):
 		var diff:Vector3 = Vector3.ZERO
 		diff = (Vector3.ZERO - min_pos) - new_origin
 
-		print("diff: ", diff)
-		print("new_origin: ", new_origin)
+		#print("diff: ", diff)
+		#print("new_origin: ", new_origin)
 
 		for j in range(mesh_data_tool.get_vertex_count()):
 			var vertex = mesh_data_tool.get_vertex(j)
@@ -678,6 +696,7 @@ func check_color(mesh) -> void:
 
 	# Wenn Primitives Mesh
 	if mesh is PrimitiveMesh:
+		#print("primitive-Mesh!")
 		mesh = primitive_to_arrayMesh(mesh)
 
 	# Abstufungen
@@ -843,12 +862,16 @@ func set_color_uv(newColorPos: Vector2, _roughness: int, _metallic: bool):
 	
 # Wenn sich die Selection ändert
 func _on_selection_change():
+	no_event = true
 	oldColor_id = ""
 	get_selected()
 
-	if check_mesh:
+	if check_mesh != null:
+		#print("check_mesh.path: ", check_mesh.resource_path)
 		show_size(check_mesh)
+		#print("check_mesh.path2: ", check_mesh.resource_path)
 		check_color(check_mesh)
+		#print("check_mesh.path3: ", check_mesh.resource_path)
 	else:
 		if ui_meshsize_x:
 			ui_meshsize_x.text = "null" 
@@ -858,6 +881,8 @@ func _on_selection_change():
 		# farben zurücksetzen
 		if ui_color:
 			ui_color.update()
+	
+	no_event = false
 	pass
 
 
@@ -874,6 +899,8 @@ func _on_JoinMultimeshButton_pressed():
 
 # wenn sich Ste Änderungs-Stufe ändert
 func _on_StepSlider_value_changed(value):
+	if no_event:
+		return
 	# ÄnderzngsStufen ändern
 	change_step = value
 	ui_step_lineEdit.text = str(value)
@@ -952,12 +979,16 @@ func _on_color_change(colorID: String):
 
 # Wenn sich die Metallic Option ändert
 func _on_change_metallic(newValue: bool):
+	if no_event:
+		return
 	# Metallic ändern
 	set_color_uv(oldColor_pos, oldColor_roughness, newValue)
 	pass
 
 # Wenn sich die Roughness ändert
 func _on_change_roughness(newValue: float):
+	if no_event:
+		return
 	# rough ändern
 	set_color_uv(oldColor_pos, int(newValue), oldColor_metallic)
 	
